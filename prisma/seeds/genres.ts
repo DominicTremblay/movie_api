@@ -6,9 +6,36 @@ export const genres = [
     genre: 'Adventure',
   },
   {
-    genre: 'Drama',
+    genre: 'Comedy',
   },
   {
     genre: 'Crime',
+  },
+  {
+    genre: 'Documentary',
+  },
+  {
+    genre: 'Drama',
+  },
+  {
+    genre: 'Fantasy',
+  },
+  {
+    genre: 'Horror',
+  },
+  {
+    genre: 'Musical',
+  },
+  {
+    genre: 'Mystery',
+  },
+  {
+    genre: 'Romance',
+  },
+  {
+    genre: 'Science Fiction',
+  },
+  {
+    genre: 'Thriller',
   },
 ];

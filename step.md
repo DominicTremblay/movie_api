@@ -118,6 +118,282 @@ model Genre {
 }
 ```
 
-2. Create the seed file
+2. Create the seed files
 
-- create `prisma/seed.ts`
+2.1 Create the seeds/genres.ts file
+
+```js
+export const genres = [{
+        genre: 'Action',
+    },
+    {
+        genre: 'Adventure',
+    },
+    {
+        genre: 'Comedy',
+    },
+    {
+        genre: 'Crime',
+    },
+    {
+        genre: 'Documentary',
+    },
+    {
+        genre: 'Drama',
+    },
+    {
+        genre: 'Fantasy',
+    },
+    {
+        genre: 'Horror',
+    },
+    {
+        genre: 'Musical',
+    },
+    {
+        genre: 'Mystery',
+    },
+    {
+        genre: 'Romance',
+    },
+    {
+        genre: 'Science Fiction',
+    },
+    {
+        genre: 'Thriller',
+    },
+];
+```
+
+2.2 Create the seeds/persons.ts file
+
+```js
+export const persons = [{
+        first_name: 'Amber',
+        last_name: 'Midthunter',
+    },
+    {
+        first_name: 'Dakota',
+        last_name: 'Beavers',
+    },
+    {
+        first_name: 'Dan',
+        last_name: 'DiLiegro',
+    },
+    {
+        first_name: 'Tom',
+        last_name: 'Cruise',
+    },
+    {
+        first_name: 'Val',
+        last_name: 'Kilmer',
+    },
+    {
+        first_name: 'Miles',
+        last_name: 'Teller',
+    },
+    {
+        first_name: 'Jennifer',
+        last_name: 'Connelly',
+    },
+    {
+        first_name: 'John',
+        last_name: 'Hamm',
+    },
+    {
+        first_name: 'Monica',
+        last_name: 'Barbaro',
+    },
+    {
+        first_name: 'Michelle',
+        last_name: 'Yeoh',
+    },
+    {
+        first_name: 'Stephanie',
+        last_name: 'Hsu',
+    },
+    {
+        first_name: 'Jamie Lee',
+        last_name: 'Curtis',
+    },
+    {
+        first_name: 'Tom',
+        last_name: 'Hanks',
+    },
+    {
+        first_name: 'Austin',
+        last_name: 'Butler',
+    },
+    {
+        first_name: 'Olivia',
+        last_name: 'DeJonge',
+    },
+];
+```
+
+2.3 Create the seeds/movies.ts file
+
+```js
+export const movies = [{
+        title: 'Prey',
+        release_date: new Date('2022-08-22'),
+        runtime_mins: 99,
+        movie_genres: [1, 2],
+        movie_casts: [{
+                character_name: 'Naru',
+                id: 1,
+            },
+            {
+                character_name: 'Taabe',
+                id: 2,
+            },
+            {
+                character_name: 'Predator',
+                id: 3,
+            },
+        ],
+    },
+    {
+        title: 'Top Gun: Maverick',
+        release_date: new Date('2022-05-22'),
+        runtime_mins: 130,
+        movie_genres: [1, 5],
+        movie_casts: [{
+                character_name: "Capt. Pete 'Maverick' Mitchell",
+                id: 4,
+            },
+            {
+                character_name: "Adm. Tom 'Iceman' Kazansky",
+                id: 5,
+            },
+            {
+                character_name: "Lt. Bradley 'Rooster' Bradshaw",
+                id: 6,
+            },
+            {
+                character_name: 'Penny Benjamin',
+                id: 7,
+            },
+            {
+                character_name: "Adm. Beau 'Cyclone' Simpson",
+                id: 8,
+            },
+            {
+                character_name: "Lt. Natasha 'Phoenix' Trace",
+                id: 9,
+            },
+        ],
+    },
+    {
+        title: 'Everything Everywhere All at Once',
+        release_date: new Date('2022-03-25'),
+        runtime_mins: 139,
+        movie_genres: [1, 2, 3],
+        movie_casts: [{
+                character_name: 'Evelyn Wang',
+                id: 10,
+            },
+            {
+                character_name: 'Joy Wang',
+                id: 11,
+            },
+            {
+                character_name: 'Deirdre Beaubeirdre',
+                id: 12,
+            },
+        ],
+    },
+    {
+        title: 'Elvis',
+        release_date: new Date('2022-06-24'),
+        runtime_mins: 159,
+        movie_genres: [6, 9],
+        movie_casts: [{
+                character_name: 'Colonel Tom Parker',
+                id: 13,
+            },
+            {
+                character_name: 'Elvis',
+                id: 14,
+            },
+            {
+                character_name: 'Priscilla',
+                id: 15,
+            },
+        ],
+    },
+];
+```
+
+2.4 create `prisma/seed.ts`
+
+```js
+import { PrismaClient } from '@prisma/client';
+import { genres } from './seeds/genres';
+import { movies } from './seeds/movies';
+import { persons } from './seeds/persons';
+
+const prisma = new PrismaClient();
+
+const seedGenres = async (genres) => {
+  for (let genre of genres) {
+    await prisma.genre.create({
+      data: genre,
+    });
+  }
+};
+
+const seedPersons = async (persons) => {
+  for (let person of persons) {
+    await prisma.person.create({
+      data: person,
+    });
+  }
+};
+
+const seedMovies = async (movies) => {
+  for (let movie of movies) {
+    await prisma.movie.create({
+      data: {
+        title: movie.title,
+        release_date: movie.release_date,
+        runtime_mins: movie.runtime_mins,
+        movie_genres: {
+          create: movie.movie_genres.map((genreId) => ({
+            genre: {
+              connect: {
+                id: genreId,
+              },
+            },
+          })),
+        },
+        movie_casts: {
+          create: movie.movie_casts.map((cast) => ({
+            character_name: cast.character_name,
+            person: {
+              connect: {
+                id: cast.id,
+              },
+            },
+          })),
+        },
+      },
+    });
+  }
+};
+
+const run = async () => {
+  await seedGenres(genres);
+  await seedPersons(persons);
+  await seedMovies(movies);
+};
+
+run()
+  .catch((err) => {
+    console.log(`Error: ${err.message}`);
+    process.exit(1);
+  })
+  .finally(async () => {
+    await prisma.$disconnect();
+  });
+```
