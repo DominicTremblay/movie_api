@@ -37,28 +37,118 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
 };
 exports.__esModule = true;
 var client_1 = require("@prisma/client");
+var genres_1 = require("./seeds/genres");
+var movies_1 = require("./seeds/movies");
+var persons_1 = require("./seeds/persons");
 var prisma = new client_1.PrismaClient();
-function run() {
-    return __awaiter(this, void 0, void 0, function () {
-        var genre;
-        return __generator(this, function (_a) {
-            switch (_a.label) {
-                case 0: return [4 /*yield*/, prisma.genre.upsert({
-                        where: {
-                            id: 1
-                        },
-                        update: {},
-                        create: {
-                            genre: 'Action'
+var seedGenres = function (genres) { return __awaiter(void 0, void 0, void 0, function () {
+    var _i, genres_2, genre;
+    return __generator(this, function (_a) {
+        switch (_a.label) {
+            case 0:
+                _i = 0, genres_2 = genres;
+                _a.label = 1;
+            case 1:
+                if (!(_i < genres_2.length)) return [3 /*break*/, 4];
+                genre = genres_2[_i];
+                return [4 /*yield*/, prisma.genre.create({
+                        data: genre
+                    })];
+            case 2:
+                _a.sent();
+                _a.label = 3;
+            case 3:
+                _i++;
+                return [3 /*break*/, 1];
+            case 4: return [2 /*return*/];
+        }
+    });
+}); };
+var seedPersons = function (persons) { return __awaiter(void 0, void 0, void 0, function () {
+    var _i, persons_2, person;
+    return __generator(this, function (_a) {
+        switch (_a.label) {
+            case 0:
+                _i = 0, persons_2 = persons;
+                _a.label = 1;
+            case 1:
+                if (!(_i < persons_2.length)) return [3 /*break*/, 4];
+                person = persons_2[_i];
+                return [4 /*yield*/, prisma.person.create({
+                        data: person
+                    })];
+            case 2:
+                _a.sent();
+                _a.label = 3;
+            case 3:
+                _i++;
+                return [3 /*break*/, 1];
+            case 4: return [2 /*return*/];
+        }
+    });
+}); };
+var seedMovies = function (movies) { return __awaiter(void 0, void 0, void 0, function () {
+    var _i, movies_2, movie;
+    return __generator(this, function (_a) {
+        switch (_a.label) {
+            case 0:
+                _i = 0, movies_2 = movies;
+                _a.label = 1;
+            case 1:
+                if (!(_i < movies_2.length)) return [3 /*break*/, 4];
+                movie = movies_2[_i];
+                return [4 /*yield*/, prisma.movie.create({
+                        data: {
+                            title: movie.title,
+                            release_date: movie.release_date,
+                            runtime_mins: movie.runtime_mins,
+                            movie_genres: {
+                                create: movie.movie_genres.map(function (genreId) { return ({
+                                    genre: {
+                                        connect: {
+                                            id: genreId
+                                        }
+                                    }
+                                }); })
+                            },
+                            movie_casts: {
+                                create: movie.movie_casts.map(function (cast) { return ({
+                                    character_name: cast.character_name,
+                                    person: {
+                                        connect: {
+                                            id: cast.id
+                                        }
+                                    }
+                                }); })
+                            }
                         }
                     })];
-                case 1:
-                    genre = _a.sent();
-                    return [2 /*return*/];
-            }
-        });
+            case 2:
+                _a.sent();
+                _a.label = 3;
+            case 3:
+                _i++;
+                return [3 /*break*/, 1];
+            case 4: return [2 /*return*/];
+        }
     });
-}
+}); };
+var run = function () { return __awaiter(void 0, void 0, void 0, function () {
+    return __generator(this, function (_a) {
+        switch (_a.label) {
+            case 0: return [4 /*yield*/, seedGenres(genres_1.genres)];
+            case 1:
+                _a.sent();
+                return [4 /*yield*/, seedPersons(persons_1.persons)];
+            case 2:
+                _a.sent();
+                return [4 /*yield*/, seedMovies(movies_1.movies)];
+            case 3:
+                _a.sent();
+                return [2 /*return*/];
+        }
+    });
+}); };
 run()["catch"](function (err) {
     console.log("Error: ".concat(err.message));
     process.exit(1);

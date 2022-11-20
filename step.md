@@ -328,72 +328,129 @@ export const movies = [{
 2.4 create `prisma/seed.ts`
 
 ```js
-import { PrismaClient } from '@prisma/client';
-import { genres } from './seeds/genres';
-import { movies } from './seeds/movies';
-import { persons } from './seeds/persons';
+import {
+    PrismaClient
+} from '@prisma/client';
+import {
+    genres
+} from './seeds/genres';
+import {
+    movies
+} from './seeds/movies';
+import {
+    persons
+} from './seeds/persons';
 
 const prisma = new PrismaClient();
 
 const seedGenres = async (genres) => {
-  for (let genre of genres) {
-    await prisma.genre.create({
-      data: genre,
-    });
-  }
+    for (let genre of genres) {
+        await prisma.genre.create({
+            data: genre,
+        });
+    }
 };
 
 const seedPersons = async (persons) => {
-  for (let person of persons) {
-    await prisma.person.create({
-      data: person,
-    });
-  }
+    for (let person of persons) {
+        await prisma.person.create({
+            data: person,
+        });
+    }
 };
 
 const seedMovies = async (movies) => {
-  for (let movie of movies) {
-    await prisma.movie.create({
-      data: {
-        title: movie.title,
-        release_date: movie.release_date,
-        runtime_mins: movie.runtime_mins,
-        movie_genres: {
-          create: movie.movie_genres.map((genreId) => ({
-            genre: {
-              connect: {
-                id: genreId,
-              },
+    for (let movie of movies) {
+        await prisma.movie.create({
+            data: {
+                title: movie.title,
+                release_date: movie.release_date,
+                runtime_mins: movie.runtime_mins,
+                movie_genres: {
+                    create: movie.movie_genres.map((genreId) => ({
+                        genre: {
+                            connect: {
+                                id: genreId,
+                            },
+                        },
+                    })),
+                },
+                movie_casts: {
+                    create: movie.movie_casts.map((cast) => ({
+                        character_name: cast.character_name,
+                        person: {
+                            connect: {
+                                id: cast.id,
+                            },
+                        },
+                    })),
+                },
             },
-          })),
-        },
-        movie_casts: {
-          create: movie.movie_casts.map((cast) => ({
-            character_name: cast.character_name,
-            person: {
-              connect: {
-                id: cast.id,
-              },
-            },
-          })),
-        },
-      },
-    });
-  }
+        });
+    }
 };
 
 const run = async () => {
-  await seedGenres(genres);
-  await seedPersons(persons);
-  await seedMovies(movies);
+    await seedGenres(genres);
+    await seedPersons(persons);
+    await seedMovies(movies);
 };
 
 run()
-  .catch((err) => {
-    console.log(`Error: ${err.message}`);
-    process.exit(1);
-  })
-  .finally(async () => {
-    await prisma.$disconnect();
-  });
+    .catch((err) => {
+        console.log(`Error: ${err.message}`);
+        process.exit(1);
+    })
+    .finally(async () => {
+        await prisma.$disconnect();
+    });
+```
+
+## Create the Route Files
+
+1. Create the basic CRUD for `routes/moviesRoutes.ts`
+
+```js
+import express from 'express';
+
+const router = express.Router();
+
+router.get('/', (req, res) => {
+    res.json({
+        msg: 'list of movies'
+    });
+});
+
+router.get('/:id', (req, res) => {
+    res.json({
+        msg: 'get one movie'
+    });
+});
+
+router.post('/', (req, res) => {
+    res.json({
+        msg: 'create movie'
+    });
+});
+router.put('/:id', (req, res) => {
+    res.json({
+        msg: 'update movie'
+    });
+});
+router.delete('/:id', (req, res) => {
+    res.json({
+        msg: 'delete a movie'
+    });
+});
+
+export default router;
+```
+
+2. Add moviesRoutes to server.ts
+
+```js
+import {
+    default as moviesRoutes
+} from './routes/moviesRoutes';
+app.use('/api/movies', moviesRoutes);
 ```

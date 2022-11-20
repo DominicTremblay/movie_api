@@ -20,11 +20,13 @@ app.use(express.json());
 
 // Separated Routes for each Resource
 // Note: Feel free to replace the example routes below with your own
-
+import { default as moviesRoutes } from './routes/moviesRoutes';
 
 // Mount all resource routes
 // Note: Feel free to replace the example routes below with your own
 // Note: Endpoints that return data (eg. JSON) usually start with `/api`
+
+app.use('/api/movies', moviesRoutes);
 
 // Note: mount other resources here, using the same pattern above
 
@@ -33,7 +35,7 @@ app.use(express.json());
 // Separate them into separate routes files (see above).
 
 app.get('/', (req, res) => {
-  res.json({msg: 'API Home'})
+  res.json({ msg: 'API Home' });
 });
 
 app.listen(PORT, () => {
