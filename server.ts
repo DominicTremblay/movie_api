@@ -1,5 +1,5 @@
 // load .env data into process.env
-import dotenv from 'dotenv';
+import * as dotenv from 'dotenv';
 dotenv.config();
 
 // Web server config

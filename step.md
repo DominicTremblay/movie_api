@@ -34,7 +34,6 @@
     "sourceMap": true,
     "outDir": "./dist",
     "strict": false,
-    "module": "es6",
     "moduleResolution": "node",
     "lib": [
       "ESNext"
@@ -59,7 +58,66 @@ export default prisma;
 
 7. Update file extension to typescript
 
-- change file extension to `.ts`
-- update all imports to remove `.js` extension
+* change file extension to `.ts`
+* update all imports to remove `.js` extension
 
 8. Delete the route files
+
+## Create the DB files
+
+1. Create The Schema
+
+```prisma
+
+model Movie {
+  id           Int          @id @default(autoincrement())
+  title        String
+  release_date String
+  runtime_mins Int
+  createdAt    DateTime     @default(now())
+  updatedAt    DateTime     @updatedAt
+  movie_casts  MovieCast[]
+  movie_genres MovieGenre[]
+}
+
+model MovieCast {
+  id             Int      @id @default(autoincrement())
+  character_name String
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+  movie          Movie?   @relation(fields: [movieId], references: [id])
+  movieId        Int?
+  person         Person?  @relation(fields: [personId], references: [id])
+  personId       Int?
+}
+
+model Person {
+  id          Int         @id @default(autoincrement())
+  first_name  String
+  last_name   String
+  createdAt   DateTime    @default(now())
+  updatedAt   DateTime    @updatedAt
+  movie_casts MovieCast[]
+}
+
+model MovieGenre {
+  id        Int      @id @default(autoincrement())
+  movie     Movie?   @relation(fields: [movieId], references: [id])
+  movieId   Int?
+  genre     Genre?   @relation(fields: [genreId], references: [id])
+  genreId   Int?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Genre {
+  id           Int          @id @default(autoincrement())
+  movie_genres MovieGenre[]
+  createdAt    DateTime     @default(now())
+  updatedAt    DateTime     @updatedAt
+}
+```
+
+2. Create the seed file
+
+- create `prisma/seed.ts`

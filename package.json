@@ -3,11 +3,10 @@
   "version": "1.0.0",
   "description": "",
   "main": "server.js",
-  "type": "module",
   "scripts": {
     "start": "node dist/src/index.js",
     "dev": "tsc-watch --onSuccess \"node ./dist/server.js\"",
-    "seed": "ts-node primsa/seed.ts",
+    "seed": "ts-node prisma/seed.ts",
     "build": "tsc"
   },
   "author": "Lighthouse Labs",

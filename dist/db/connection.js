@@ -1,4 +1,6 @@
-import { PrismaClient } from '@prisma/client';
-var prisma = new PrismaClient();
-export default prisma;
+"use strict";
+exports.__esModule = true;
+var client_1 = require("@prisma/client");
+var prisma = new client_1.PrismaClient();
+exports["default"] = prisma;
 //# sourceMappingURL=connection.js.map

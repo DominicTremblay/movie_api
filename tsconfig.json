@@ -3,7 +3,6 @@
     "sourceMap": true,
     "outDir": "./dist",
     "strict": false,
-    "module": "es6",
     "moduleResolution": "node",
     "lib": [
       "ESNext"
