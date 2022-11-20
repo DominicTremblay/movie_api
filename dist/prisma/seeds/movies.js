@@ -26,7 +26,7 @@ exports.movies = [
         title: 'Top Gun: Maverick',
         release_date: new Date('2022-05-22'),
         runtime_mins: 130,
-        movie_genres: [1, 5],
+        movie_genres: [1, 6],
         movie_casts: [
             {
                 character_name: "Capt. Pete 'Maverick' Mitchell",

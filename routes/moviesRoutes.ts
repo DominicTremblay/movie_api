@@ -1,9 +1,11 @@
 import express from 'express';
+import { getMovieList } from '../db/queries/movieQueries';
 
 const router = express.Router();
 
-router.get('/', (req, res) => {
-  res.json({ msg: 'list of movies' });
+router.get('/', async (req, res) => {
+  const movieList = await getMovieList();
+  res.json({ data: movieList });
 });
 
 router.get('/:id', (req, res) => {

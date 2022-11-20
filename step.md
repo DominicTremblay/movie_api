@@ -454,3 +454,35 @@ import {
 } from './routes/moviesRoutes';
 app.use('/api/movies', moviesRoutes);
 ```
+
+3. Create a `db/queries/movieQueries/ts` file
+
+3.1 Create the `getMovieList` query
+
+```js
+import prisma from '../connection';
+
+export const getMovieList = async () => {
+    const movieList = await prisma.movie.findMany({
+        where: {
+            movie_genres: {
+                some: {},
+            },
+        },
+        include: {
+            movie_genres: {
+                include: {
+                    genre: true,
+                },
+            },
+            movie_casts: {
+                include: {
+                    person: true,
+                },
+            },
+        },
+    });
+
+    return movieList;
+};
+```

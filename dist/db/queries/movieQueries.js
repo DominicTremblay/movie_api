@@ -39,32 +39,36 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 exports.__esModule = true;
-var express_1 = __importDefault(require("express"));
-var movieQueries_1 = require("../db/queries/movieQueries");
-var router = express_1["default"].Router();
-router.get('/', function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
+exports.getMovieList = void 0;
+var connection_1 = __importDefault(require("../connection"));
+var getMovieList = function () { return __awaiter(void 0, void 0, void 0, function () {
     var movieList;
     return __generator(this, function (_a) {
         switch (_a.label) {
-            case 0: return [4 /*yield*/, (0, movieQueries_1.getMovieList)()];
+            case 0: return [4 /*yield*/, connection_1["default"].movie.findMany({
+                    where: {
+                        movie_genres: {
+                            some: {}
+                        }
+                    },
+                    include: {
+                        movie_genres: {
+                            include: {
+                                genre: true
+                            }
+                        },
+                        movie_casts: {
+                            include: {
+                                person: true
+                            }
+                        }
+                    }
+                })];
             case 1:
                 movieList = _a.sent();
-                res.json({ data: movieList });
-                return [2 /*return*/];
+                return [2 /*return*/, movieList];
         }
     });
-}); });
-router.get('/:id', function (req, res) {
-    res.json({ msg: 'get one movie' });
-});
-router.post('/', function (req, res) {
-    res.json({ msg: 'create movie' });
-});
-router.put('/:id', function (req, res) {
-    res.json({ msg: 'update movie' });
-});
-router["delete"]('/:id', function (req, res) {
-    res.json({ msg: 'delete a movie' });
-});
-exports["default"] = router;
-//# sourceMappingURL=moviesRoutes.js.map
+}); };
+exports.getMovieList = getMovieList;
+//# sourceMappingURL=movieQueries.js.map
