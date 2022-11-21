@@ -39,7 +39,8 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 exports.__esModule = true;
-exports.createMovie = exports.getMovieById = exports.getMovieList = void 0;
+exports.updateMovie = exports.deleteMovie = exports.createMovie = exports.getMovieById = exports.getMovieList = void 0;
+var index_1 = require("../../helpers/index");
 var connection_1 = __importDefault(require("../connection"));
 var getMovieList = function () { return __awaiter(void 0, void 0, void 0, function () {
     var movieList;
@@ -115,4 +116,37 @@ var createMovie = function (_a) {
     });
 };
 exports.createMovie = createMovie;
+var deleteMovie = function (id) { return __awaiter(void 0, void 0, void 0, function () {
+    var movie;
+    return __generator(this, function (_a) {
+        switch (_a.label) {
+            case 0: return [4 /*yield*/, connection_1["default"].movie["delete"]({
+                    where: {
+                        id: id
+                    }
+                })];
+            case 1:
+                movie = _a.sent();
+                return [2 /*return*/, movie];
+        }
+    });
+}); };
+exports.deleteMovie = deleteMovie;
+var updateMovie = function (id, movieInfo) { return __awaiter(void 0, void 0, void 0, function () {
+    var movie;
+    return __generator(this, function (_a) {
+        switch (_a.label) {
+            case 0: return [4 /*yield*/, connection_1["default"].movie.update({
+                    where: {
+                        id: id
+                    },
+                    data: (0, index_1.formatMovie)(movieInfo)
+                })];
+            case 1:
+                movie = _a.sent();
+                return [2 /*return*/];
+        }
+    });
+}); };
+exports.updateMovie = updateMovie;
 //# sourceMappingURL=movieQueries.js.map

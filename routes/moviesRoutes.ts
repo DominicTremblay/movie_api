@@ -1,5 +1,11 @@
 import express from 'express';
-import { getMovieById, getMovieList, createMovie } from '../db/queries/movieQueries';
+import {
+  getMovieById,
+  getMovieList,
+  createMovie,
+  updateMovie,
+  deleteMovie,
+} from '../db/queries/movieQueries';
 
 const router = express.Router();
 
@@ -23,20 +29,29 @@ router.get('/:id', async (req, res) => {
 });
 
 router.post('/', async (req, res) => {
-
   try {
     const movie = await createMovie(req.body);
     res.json({ movie });
   } catch (err) {
     res.json({ msg: err.message });
   }
-
 });
-router.put('/:id', (req, res) => {
+
+router.put('/:id', async (req, res) => {
+  const id = Number(req.params.id);
+
+  await updateMovie(id, req.body);
   res.json({ msg: 'update movie' });
 });
-router.delete('/:id', (req, res) => {
-  res.json({ msg: 'delete a movie' });
+
+router.delete('/:id', async (req, res) => {
+  const id = Number(req.params.id);
+  try {
+    const movie = await deleteMovie(id);
+    res.json({ movie });
+  } catch (err) {
+    res.json({ msg: err.message });
+  }
 });
 
 export default router;

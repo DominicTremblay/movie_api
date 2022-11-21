@@ -1,4 +1,6 @@
 import { Prisma } from '@prisma/client';
+import {formatMovie} from '../../helpers/index';
+
 import prisma from '../connection';
 
 export const getMovieList = async () => {
@@ -51,4 +53,25 @@ export const createMovie = async ({ title, release_date, runtime }) => {
   });
 
   return movie;
+};
+
+export const deleteMovie = async (id) => {
+  const movie = await prisma.movie.delete({
+    where: {
+      id,
+    },
+  });
+
+  return movie;
+};
+
+
+
+export const updateMovie = async (id, movieInfo) => {
+  const movie = await prisma.movie.update({
+    where: {
+      id,
+    },
+    data: formatMovie(movieInfo),
+  });
 };

@@ -455,7 +455,7 @@ import {
 app.use('/api/movies', moviesRoutes);
 ```
 
-3. Create a `db/queries/movieQueries/ts` file
+3. Create a `db/queries/movieQueries.ts` file
 
 3.1 Create the `getMovieList` query
 
@@ -494,7 +494,7 @@ router.get('/', async (req, res) => {
 });
 ```
 
-3.3 Create the `getMovieById` query
+3.3 Create `db/queries/getMovieById.ts`
 
 ```js
 export const getMovieById = async (id) => {
@@ -526,6 +526,118 @@ router.get('/:id', async (req, res) => {
     const id = Number(req.params.id);
     try {
         const movie = await getMovieById(id);
+        res.json({
+            movie
+        });
+    } catch (err) {
+        res.json({
+            msg: err.message
+        });
+    }
+});
+```
+
+3.5 Create `db/queries/createMovie.ts`
+
+```js
+export const createMovie = async ({
+    title,
+    release_date,
+    runtime
+}) => {
+    const movie = await prisma.movie.create({
+        data: {
+            title,
+            release_date: new Date(release_date),
+            runtime_mins: Number(runtime),
+        },
+    });
+
+    return movie;
+};
+```
+
+3.6 Update the Route Handler
+
+```js
+router.post('/', async (req, res) => {
+    try {
+        const movie = await createMovie(req.body);
+        res.json({
+            movie
+        });
+    } catch (err) {
+        res.json({
+            msg: err.message
+        });
+    }
+});
+```
+
+3.7 Create `db/queries/updateMovie.ts`
+
+```js
+export const updateMovie = async (id, movieInfo) => {
+  const movie = await prisma.movie.update({
+    where: {
+      id,
+    },
+    data: formatMovie(movieInfo),
+  });
+};
+```
+
+3.7.1 Create `helpers/index.ts`
+
+```js
+export const formatMovie = (movieInfo) => {
+  interface Movie {
+    title?: string;
+    runtime_mins?: number;
+    release_date?: Date;
+  }
+
+  const movie: Movie = {};
+
+  if (movieInfo.title) {
+    movie.title = movieInfo.title;
+  }
+
+  if (movieInfo.runtime_mins) {
+    movie.runtime_mins = Number(movieInfo.runtime_mins);
+  }
+
+  if (movieInfo.release_date) {
+    movie.release_date = new Date(movieInfo.release_date);
+  }
+
+  return movie;
+};
+```
+
+3.8 Update the Route Handler
+
+3.9 Create `db/queries/deleteMovie.ts`
+
+```js
+export const deleteMovie = async (id) => {
+    const movie = await prisma.movie.delete({
+        where: {
+            id,
+        },
+    });
+
+    return movie;
+};
+```
+
+3.10 Update the Route Handler
+
+```js
+router.delete('/:id', async (req, res) => {
+    const id = Number(req.params.id);
+    try {
+        const movie = await deleteMovie(id);
         res.json({
             movie
         });
