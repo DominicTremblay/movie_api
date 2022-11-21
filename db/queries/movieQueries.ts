@@ -41,53 +41,14 @@ export const getMovieById = async (id) => {
   return movie;
 };
 
-export const createMovie = async ({
-  title,
-  release_date,
-  runtime,
-  genres,
-  cast,
-}) => {
-  const genresFound = await prisma.genre.findMany({
-    where: {
-      genre: {
-        in: genres,
-      },
+export const createMovie = async ({ title, release_date, runtime }) => {
+  const movie = await prisma.movie.create({
+    data: {
+      title,
+      release_date: new Date(release_date),
+      runtime_mins: Number(runtime),
     },
   });
 
-  const genreIds = genresFound.map((genre) => genre.id);
-
-  const castNames = cast.map(
-    (member) => `${member.first_name} ${member.last_name}`
-  );
-
-  // const castNames = ['Tom Hanks', 'Tom Cruise'];
-  console.log({ castNames });
-
-  const personsFound: any = await prisma.$queryRaw`
-      SELECT * FROM "Person"
-      WHERE concat(first_name, ' ', last_name)
-      IN (${Prisma.join(castNames)})`;
-
-  console.log(personsFound);
-
-  const namesFound = personsFound.map(
-    ({ first_name, last_name }) => `${first_name} ${last_name}`
-  );
-
-  const personsToAdd = cast.filter(
-    ({ first_name, last_name }) =>
-      !namesFound.includes(`${first_name} ${last_name}`)
-  );
-
-  const persons = await prisma.person.createMany({
-    data: personsToAdd.map(({ first_name, last_name }) => ({
-      first_name,
-      last_name,
-    })),
-  });
-
-  console.log({ personsToAdd });
-  console.log({ persons });
+  return movie;
 };

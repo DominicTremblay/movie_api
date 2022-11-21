@@ -92,7 +92,7 @@ router.post('/', function (req, res) { return __awaiter(void 0, void 0, void 0, 
                 return [4 /*yield*/, (0, movieQueries_1.createMovie)(req.body)];
             case 1:
                 movie = _a.sent();
-                res.json({ data: req.body });
+                res.json({ movie: movie });
                 return [3 /*break*/, 3];
             case 2:
                 err_3 = _a.sent();

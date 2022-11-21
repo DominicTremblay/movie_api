@@ -26,7 +26,7 @@ router.post('/', async (req, res) => {
 
   try {
     const movie = await createMovie(req.body);
-    res.json({ data: req.body });
+    res.json({ movie });
   } catch (err) {
     res.json({ msg: err.message });
   }

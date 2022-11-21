@@ -1,8 +1,4 @@
 "use strict";
-var __makeTemplateObject = (this && this.__makeTemplateObject) || function (cooked, raw) {
-    if (Object.defineProperty) { Object.defineProperty(cooked, "raw", { value: raw }); } else { cooked.raw = raw; }
-    return cooked;
-};
 var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
     function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
     return new (P || (P = Promise))(function (resolve, reject) {
@@ -44,7 +40,6 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 exports.__esModule = true;
 exports.createMovie = exports.getMovieById = exports.getMovieList = void 0;
-var client_1 = require("@prisma/client");
 var connection_1 = __importDefault(require("../connection"));
 var getMovieList = function () { return __awaiter(void 0, void 0, void 0, function () {
     var movieList;
@@ -100,54 +95,24 @@ var getMovieById = function (id) { return __awaiter(void 0, void 0, void 0, func
 }); };
 exports.getMovieById = getMovieById;
 var createMovie = function (_a) {
-    var title = _a.title, release_date = _a.release_date, runtime = _a.runtime, genres = _a.genres, cast = _a.cast;
+    var title = _a.title, release_date = _a.release_date, runtime = _a.runtime;
     return __awaiter(void 0, void 0, void 0, function () {
-        var genresFound, genreIds, castNames, personsFound, namesFound, personsToAdd, persons;
+        var movie;
         return __generator(this, function (_b) {
             switch (_b.label) {
-                case 0: return [4 /*yield*/, connection_1["default"].genre.findMany({
-                        where: {
-                            genre: {
-                                "in": genres
-                            }
+                case 0: return [4 /*yield*/, connection_1["default"].movie.create({
+                        data: {
+                            title: title,
+                            release_date: new Date(release_date),
+                            runtime_mins: Number(runtime)
                         }
                     })];
                 case 1:
-                    genresFound = _b.sent();
-                    genreIds = genresFound.map(function (genre) { return genre.id; });
-                    castNames = cast.map(function (member) { return "".concat(member.first_name, " ").concat(member.last_name); });
-                    // const castNames = ['Tom Hanks', 'Tom Cruise'];
-                    console.log({ castNames: castNames });
-                    return [4 /*yield*/, connection_1["default"].$queryRaw(templateObject_1 || (templateObject_1 = __makeTemplateObject(["\n      SELECT * FROM \"Person\"\n      WHERE concat(first_name, ' ', last_name)\n      IN (", ")"], ["\n      SELECT * FROM \"Person\"\n      WHERE concat(first_name, ' ', last_name)\n      IN (", ")"])), client_1.Prisma.join(castNames))];
-                case 2:
-                    personsFound = _b.sent();
-                    console.log(personsFound);
-                    namesFound = personsFound.map(function (_a) {
-                        var first_name = _a.first_name, last_name = _a.last_name;
-                        return "".concat(first_name, " ").concat(last_name);
-                    });
-                    personsToAdd = cast.filter(function (_a) {
-                        var first_name = _a.first_name, last_name = _a.last_name;
-                        return !namesFound.includes("".concat(first_name, " ").concat(last_name));
-                    });
-                    return [4 /*yield*/, connection_1["default"].person.createMany({
-                            data: personsToAdd.map(function (_a) {
-                                var first_name = _a.first_name, last_name = _a.last_name;
-                                return ({
-                                    first_name: first_name,
-                                    last_name: last_name
-                                });
-                            })
-                        })];
-                case 3:
-                    persons = _b.sent();
-                    console.log({ personsToAdd: personsToAdd });
-                    console.log({ persons: persons });
-                    return [2 /*return*/];
+                    movie = _b.sent();
+                    return [2 /*return*/, movie];
             }
         });
     });
 };
 exports.createMovie = createMovie;
-var templateObject_1;
 //# sourceMappingURL=movieQueries.js.map

@@ -68,11 +68,10 @@ export default prisma;
 1. Create The Schema
 
 ```prisma
-
 model Movie {
   id           Int          @id @default(autoincrement())
-  title        String
-  release_date String
+  title        String       @unique
+  release_date DateTime
   runtime_mins Int
   createdAt    DateTime     @default(now())
   updatedAt    DateTime     @updatedAt
@@ -82,7 +81,7 @@ model Movie {
 
 model MovieCast {
   id             Int      @id @default(autoincrement())
-  character_name String
+  character_name String   @unique
   createdAt      DateTime @default(now())
   updatedAt      DateTime @updatedAt
   movie          Movie?   @relation(fields: [movieId], references: [id])
@@ -112,6 +111,7 @@ model MovieGenre {
 
 model Genre {
   id           Int          @id @default(autoincrement())
+  genre        String       @unique
   movie_genres MovieGenre[]
   createdAt    DateTime     @default(now())
   updatedAt    DateTime     @updatedAt
