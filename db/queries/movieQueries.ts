@@ -1,5 +1,6 @@
 import prisma from '../connection';
 import { formatMovie } from '../../helpers/index';
+import { createPerson } from './personQueries';
 
 export const getMovieList = async () => {
   const movieList = await prisma.movie.findMany({
@@ -71,4 +72,26 @@ export const updateMovie = async (id, movieInfo) => {
     data: formatMovie(movieInfo),
   });
   return movie;
+};
+
+export const addMovieCharacter = async (movieId, characterName, personId) => {
+  console.log(movieId, characterName, personId);
+
+  const movieCast = prisma.movieCast.create({
+    data: {
+      character_name: characterName,
+      person: {
+        connect: {
+          id: personId,
+        },
+      },
+      movie: {
+        connect: {
+          id: movieId,
+        },
+      },
+    },
+  });
+
+  return movieCast;
 };

@@ -5,6 +5,7 @@ import {
   createMovie,
   updateMovie,
   deleteMovie,
+  addMovieCharacter,
 } from '../db/queries/movieQueries';
 
 const router = express.Router();
@@ -50,6 +51,25 @@ router.delete('/:id', async (req, res) => {
     const movie = await deleteMovie(id);
     res.json({ movie });
   } catch (err) {
+    res.json({ msg: err.message });
+  }
+});
+
+router.post('/:id/casts', async (req, res) => {
+  const movieId = Number(req.params.id);
+  const { character_name: characterName } = req.body;
+  const personId = Number(req.body.person_id);
+
+  try {
+    const movieCharacter = await addMovieCharacter(
+      movieId,
+      characterName,
+      personId
+    );
+
+    res.json(movieCharacter);
+  } catch (err) {
+    console.log(err.message);
     res.json({ msg: err.message });
   }
 });

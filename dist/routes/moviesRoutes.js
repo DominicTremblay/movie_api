@@ -138,5 +138,30 @@ router["delete"]('/:id', function (req, res) { return __awaiter(void 0, void 0, 
         }
     });
 }); });
+router.post('/:id/casts', function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
+    var movieId, characterName, personId, movieCharacter, err_5;
+    return __generator(this, function (_a) {
+        switch (_a.label) {
+            case 0:
+                movieId = Number(req.params.id);
+                characterName = req.body.character_name;
+                personId = Number(req.body.person_id);
+                _a.label = 1;
+            case 1:
+                _a.trys.push([1, 3, , 4]);
+                return [4 /*yield*/, (0, movieQueries_1.addMovieCharacter)(movieId, characterName, personId)];
+            case 2:
+                movieCharacter = _a.sent();
+                res.json(movieCharacter);
+                return [3 /*break*/, 4];
+            case 3:
+                err_5 = _a.sent();
+                console.log(err_5.message);
+                res.json({ msg: err_5.message });
+                return [3 /*break*/, 4];
+            case 4: return [2 /*return*/];
+        }
+    });
+}); });
 exports["default"] = router;
 //# sourceMappingURL=moviesRoutes.js.map

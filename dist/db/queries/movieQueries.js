@@ -39,7 +39,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 exports.__esModule = true;
-exports.updateMovie = exports.deleteMovie = exports.createMovie = exports.getMovieById = exports.getMovieList = void 0;
+exports.addMovieCharacter = exports.updateMovie = exports.deleteMovie = exports.createMovie = exports.getMovieById = exports.getMovieList = void 0;
 var connection_1 = __importDefault(require("../connection"));
 var index_1 = require("../../helpers/index");
 var getMovieList = function () { return __awaiter(void 0, void 0, void 0, function () {
@@ -149,4 +149,27 @@ var updateMovie = function (id, movieInfo) { return __awaiter(void 0, void 0, vo
     });
 }); };
 exports.updateMovie = updateMovie;
+var addMovieCharacter = function (movieId, characterName, personId) { return __awaiter(void 0, void 0, void 0, function () {
+    var movieCast;
+    return __generator(this, function (_a) {
+        console.log(movieId, characterName, personId);
+        movieCast = connection_1["default"].movieCast.create({
+            data: {
+                character_name: characterName,
+                person: {
+                    connect: {
+                        id: personId
+                    }
+                },
+                movie: {
+                    connect: {
+                        id: movieId
+                    }
+                }
+            }
+        });
+        return [2 /*return*/, movieCast];
+    });
+}); };
+exports.addMovieCharacter = addMovieCharacter;
 //# sourceMappingURL=movieQueries.js.map

@@ -938,3 +938,53 @@ import {
 
 app.use('/api/persons', personRoutes);
 ```
+### 4. Add a Movie Character
+
+4.1 Create the `addMovieCharacter` query in `db/queries/movieQueries.ts`
+
+```js
+export const addMovieCharacter = async (movieId, characterName, personId) => {
+  console.log(movieId, characterName, personId);
+
+  const movieCast = prisma.movieCast.create({
+    data: {
+      character_name: characterName,
+      person: {
+        connect: {
+          id: personId,
+        },
+      },
+      movie: {
+        connect: {
+          id: movieId,
+        },
+      },
+    },
+  });
+
+  return movieCast;
+};
+```
+
+4.2 Create a Nested Route Handler
+
+```js
+router.post('/:id/casts', async (req, res) => {
+  const movieId = Number(req.params.id);
+  const { character_name: characterName } = req.body;
+  const personId = Number(req.body.person_id);
+
+  try {
+    const movieCharacter = await addMovieCharacter(
+      movieId,
+      characterName,
+      personId
+    );
+
+    res.json(movieCharacter);
+  } catch (err) {
+    console.log(err.message);
+    res.json({ msg: err.message });
+  }
+});
+```
