@@ -1,7 +1,5 @@
-import { Prisma } from '@prisma/client';
-import {formatMovie} from '../../helpers/index';
-
 import prisma from '../connection';
+import { formatMovie } from '../../helpers/index';
 
 export const getMovieList = async () => {
   const movieList = await prisma.movie.findMany({
@@ -64,8 +62,6 @@ export const deleteMovie = async (id) => {
 
   return movie;
 };
-
-
 
 export const updateMovie = async (id, movieInfo) => {
   const movie = await prisma.movie.update({

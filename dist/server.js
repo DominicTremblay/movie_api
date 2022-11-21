@@ -44,10 +44,12 @@ app.use(express_1["default"].json());
 // Separated Routes for each Resource
 // Note: Feel free to replace the example routes below with your own
 var moviesRoutes_1 = __importDefault(require("./routes/moviesRoutes"));
+var genreRoutes_1 = __importDefault(require("./routes/genreRoutes"));
 // Mount all resource routes
 // Note: Feel free to replace the example routes below with your own
 // Note: Endpoints that return data (eg. JSON) usually start with `/api`
 app.use('/api/movies', moviesRoutes_1["default"]);
+app.use('/api/genres', genreRoutes_1["default"]);
 // Note: mount other resources here, using the same pattern above
 // Home page
 // Warning: avoid creating more routes in this file!

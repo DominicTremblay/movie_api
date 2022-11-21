@@ -39,114 +39,81 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 exports.__esModule = true;
-exports.updateMovie = exports.deleteMovie = exports.createMovie = exports.getMovieById = exports.getMovieList = void 0;
+exports.deleteGenre = exports.updateGenre = exports.createGenre = exports.getGenreById = exports.getGenres = void 0;
 var connection_1 = __importDefault(require("../connection"));
-var index_1 = require("../../helpers/index");
-var getMovieList = function () { return __awaiter(void 0, void 0, void 0, function () {
-    var movieList;
+var getGenres = function () { return __awaiter(void 0, void 0, void 0, function () {
+    var genres;
     return __generator(this, function (_a) {
         switch (_a.label) {
-            case 0: return [4 /*yield*/, connection_1["default"].movie.findMany({
-                    include: {
-                        movie_genres: {
-                            include: {
-                                genre: true
-                            }
-                        },
-                        movie_casts: {
-                            include: {
-                                person: true
-                            }
-                        }
-                    }
-                })];
+            case 0: return [4 /*yield*/, connection_1["default"].genre.findMany()];
             case 1:
-                movieList = _a.sent();
-                return [2 /*return*/, movieList];
+                genres = _a.sent();
+                return [2 /*return*/, genres];
         }
     });
 }); };
-exports.getMovieList = getMovieList;
-var getMovieById = function (id) { return __awaiter(void 0, void 0, void 0, function () {
-    var movie;
+exports.getGenres = getGenres;
+var getGenreById = function (id) { return __awaiter(void 0, void 0, void 0, function () {
+    var genre;
     return __generator(this, function (_a) {
         switch (_a.label) {
-            case 0: return [4 /*yield*/, connection_1["default"].movie.findUnique({
+            case 0: return [4 /*yield*/, connection_1["default"].genre.findUnique({
+                    where: {
+                        id: id
+                    }
+                })];
+            case 1:
+                genre = _a.sent();
+                return [2 /*return*/, genre];
+        }
+    });
+}); };
+exports.getGenreById = getGenreById;
+var createGenre = function (genreInfo) { return __awaiter(void 0, void 0, void 0, function () {
+    var genre;
+    return __generator(this, function (_a) {
+        switch (_a.label) {
+            case 0: return [4 /*yield*/, connection_1["default"].genre.create({
+                    data: genreInfo
+                })];
+            case 1:
+                genre = _a.sent();
+                return [2 /*return*/, genre];
+        }
+    });
+}); };
+exports.createGenre = createGenre;
+var updateGenre = function (id, genreInfo) { return __awaiter(void 0, void 0, void 0, function () {
+    var genre;
+    return __generator(this, function (_a) {
+        switch (_a.label) {
+            case 0: return [4 /*yield*/, connection_1["default"].genre.update({
                     where: {
                         id: id
                     },
-                    include: {
-                        movie_genres: {
-                            include: {
-                                genre: true
-                            }
-                        },
-                        movie_casts: {
-                            include: {
-                                person: true
-                            }
-                        }
-                    }
+                    data: genreInfo
                 })];
             case 1:
-                movie = _a.sent();
-                return [2 /*return*/, movie];
+                genre = _a.sent();
+                return [2 /*return*/, genre];
         }
     });
 }); };
-exports.getMovieById = getMovieById;
-var createMovie = function (_a) {
-    var title = _a.title, release_date = _a.release_date, runtime = _a.runtime;
-    return __awaiter(void 0, void 0, void 0, function () {
-        var movie;
-        return __generator(this, function (_b) {
-            switch (_b.label) {
-                case 0: return [4 /*yield*/, connection_1["default"].movie.create({
-                        data: {
-                            title: title,
-                            release_date: new Date(release_date),
-                            runtime_mins: Number(runtime)
-                        }
-                    })];
-                case 1:
-                    movie = _b.sent();
-                    return [2 /*return*/, movie];
-            }
-        });
-    });
-};
-exports.createMovie = createMovie;
-var deleteMovie = function (id) { return __awaiter(void 0, void 0, void 0, function () {
-    var movie;
+exports.updateGenre = updateGenre;
+var deleteGenre = function (id) { return __awaiter(void 0, void 0, void 0, function () {
+    var genre;
     return __generator(this, function (_a) {
         switch (_a.label) {
-            case 0: return [4 /*yield*/, connection_1["default"].movie["delete"]({
+            case 0: return [4 /*yield*/, connection_1["default"].genre["delete"]({
                     where: {
                         id: id
                     }
                 })];
             case 1:
-                movie = _a.sent();
-                return [2 /*return*/, movie];
+                genre = _a.sent();
+                return [2 /*return*/, genre];
         }
     });
 }); };
-exports.deleteMovie = deleteMovie;
-var updateMovie = function (id, movieInfo) { return __awaiter(void 0, void 0, void 0, function () {
-    var movie;
-    return __generator(this, function (_a) {
-        switch (_a.label) {
-            case 0: return [4 /*yield*/, connection_1["default"].movie.update({
-                    where: {
-                        id: id
-                    },
-                    data: (0, index_1.formatMovie)(movieInfo)
-                })];
-            case 1:
-                movie = _a.sent();
-                return [2 /*return*/];
-        }
-    });
-}); };
-exports.updateMovie = updateMovie;
-//# sourceMappingURL=movieQueries.js.map
+exports.deleteGenre = deleteGenre;
+//# sourceMappingURL=genreQueries.js.map

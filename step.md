@@ -408,7 +408,7 @@ run()
 
 ## Create the Route Files
 
-1. Create the basic CRUD for `routes/moviesRoutes.ts`
+### 1. Create the basic CRUD for `routes/moviesRoutes.ts`
 
 ```js
 import express from 'express';
@@ -578,12 +578,12 @@ router.post('/', async (req, res) => {
 
 ```js
 export const updateMovie = async (id, movieInfo) => {
-  const movie = await prisma.movie.update({
-    where: {
-      id,
-    },
-    data: formatMovie(movieInfo),
-  });
+    const movie = await prisma.movie.update({
+        where: {
+            id,
+        },
+        data: formatMovie(movieInfo),
+    });
 };
 ```
 
@@ -591,27 +591,27 @@ export const updateMovie = async (id, movieInfo) => {
 
 ```js
 export const formatMovie = (movieInfo) => {
-  interface Movie {
-    title?: string;
-    runtime_mins?: number;
-    release_date?: Date;
-  }
+    interface Movie {
+        title ? : string;
+        runtime_mins ? : number;
+        release_date ? : Date;
+    }
 
-  const movie: Movie = {};
+    const movie: Movie = {};
 
-  if (movieInfo.title) {
-    movie.title = movieInfo.title;
-  }
+    if (movieInfo.title) {
+        movie.title = movieInfo.title;
+    }
 
-  if (movieInfo.runtime_mins) {
-    movie.runtime_mins = Number(movieInfo.runtime_mins);
-  }
+    if (movieInfo.runtime_mins) {
+        movie.runtime_mins = Number(movieInfo.runtime_mins);
+    }
 
-  if (movieInfo.release_date) {
-    movie.release_date = new Date(movieInfo.release_date);
-  }
+    if (movieInfo.release_date) {
+        movie.release_date = new Date(movieInfo.release_date);
+    }
 
-  return movie;
+    return movie;
 };
 ```
 
@@ -647,4 +647,141 @@ router.delete('/:id', async (req, res) => {
         });
     }
 });
+```
+
+### 2. Create the basic CRUD for `routes/genreRoutes.ts`
+
+```js
+import express from 'express';
+import {
+    createGenre,
+    deleteGenre,
+    getGenreById,
+    getGenres,
+    updateGenre,
+} from '../db/queries/genreQueries';
+
+const router = express.Router();
+
+router.get('/', async (req, res) => {
+    try {
+        const genres = await getGenres();
+        res.json(genres);
+    } catch (err) {
+        res.json({
+            msg: err.message
+        });
+    }
+});
+
+router.get('/:id', async (req, res) => {
+    const id = Number(req.params.id);
+    try {
+        const genre = await getGenreById(id);
+        res.json(genre);
+    } catch (err) {
+        res.json({
+            msg: err.message
+        });
+    }
+});
+
+router.post('/', async (req, res) => {
+    try {
+        const genre = await createGenre(req.body);
+        res.json(genre);
+    } catch (err) {
+        res.json({
+            msg: err.message
+        });
+    }
+});
+
+router.put('/:id', async (req, res) => {
+    const id = Number(req.params.id);
+
+    try {
+        const genre = await updateGenre(id, req.body);
+        res.json(genre);
+    } catch (err) {
+        res.json({
+            msg: err.message
+        });
+    }
+});
+
+router.delete('/:id', async (req, res) => {
+    const id = Number(req.params.id);
+
+    try {
+        const genre = await deleteGenre(id);
+        res.json(genre);
+    } catch (err) {
+        res.json({
+            msg: err.message
+        });
+    }
+});
+
+export default router;
+```
+
+2.1 Create `db/queries/genreQueries.ts`
+
+```js
+import prisma from '../connection';
+
+export const getGenres = async () => {
+    const genres = await prisma.genre.findMany();
+
+    return genres;
+};
+
+export const getGenreById = async (id) => {
+    const genre = await prisma.genre.findUnique({
+        where: {
+            id,
+        },
+    });
+
+    return genre;
+};
+
+export const createGenre = async (genreInfo) => {
+    const genre = await prisma.genre.create({
+        data: genreInfo,
+    });
+
+    return genre;
+};
+
+export const updateGenre = async (id, genreInfo) => {
+    const genre = await prisma.genre.update({
+        where: {
+            id,
+        },
+        data: genreInfo,
+    });
+    return genre;
+};
+
+export const deleteGenre = async (id) => {
+    const genre = await prisma.genre.delete({
+        where: {
+            id,
+        },
+    });
+
+    return genre;
+};
+```
+
+2.2 Add the `routes/genreRoutes.ts` to server.ts
+
+```js
+import {
+    default as genresRoutes
+} from './routes/genreRoutes';
+
+app.use('/api/genres', genresRoutes);
 ```
