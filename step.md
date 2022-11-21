@@ -2,7 +2,9 @@
 
 ## Clone the Express API repo
 
+* `git clone git@github.com:DominicTremblay/w10-adv-lecture-api.git`
 
+* repo: [https://github.com/DominicTremblay/w10-adv-lecture-api](https://github.com/DominicTremblay/w10-adv-lecture-api)
 
 ## Prisma setup
 
