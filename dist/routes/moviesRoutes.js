@@ -43,23 +43,65 @@ var express_1 = __importDefault(require("express"));
 var movieQueries_1 = require("../db/queries/movieQueries");
 var router = express_1["default"].Router();
 router.get('/', function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
-    var movieList;
+    var movieList, err_1;
     return __generator(this, function (_a) {
         switch (_a.label) {
-            case 0: return [4 /*yield*/, (0, movieQueries_1.getMovieList)()];
+            case 0:
+                _a.trys.push([0, 2, , 3]);
+                return [4 /*yield*/, (0, movieQueries_1.getMovieList)()];
             case 1:
                 movieList = _a.sent();
-                res.json({ data: movieList });
-                return [2 /*return*/];
+                res.json({ movieList: movieList });
+                return [3 /*break*/, 3];
+            case 2:
+                err_1 = _a.sent();
+                res.json({ msg: err_1.message });
+                return [3 /*break*/, 3];
+            case 3: return [2 /*return*/];
         }
     });
 }); });
-router.get('/:id', function (req, res) {
-    res.json({ msg: 'get one movie' });
-});
-router.post('/', function (req, res) {
-    res.json({ msg: 'create movie' });
-});
+router.get('/:id', function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
+    var id, movie, err_2;
+    return __generator(this, function (_a) {
+        switch (_a.label) {
+            case 0:
+                id = Number(req.params.id);
+                _a.label = 1;
+            case 1:
+                _a.trys.push([1, 3, , 4]);
+                return [4 /*yield*/, (0, movieQueries_1.getMovieById)(id)];
+            case 2:
+                movie = _a.sent();
+                res.json({ movie: movie });
+                return [3 /*break*/, 4];
+            case 3:
+                err_2 = _a.sent();
+                res.json({ msg: err_2.message });
+                return [3 /*break*/, 4];
+            case 4: return [2 /*return*/];
+        }
+    });
+}); });
+router.post('/', function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
+    var movie, err_3;
+    return __generator(this, function (_a) {
+        switch (_a.label) {
+            case 0:
+                _a.trys.push([0, 2, , 3]);
+                return [4 /*yield*/, (0, movieQueries_1.createMovie)(req.body)];
+            case 1:
+                movie = _a.sent();
+                res.json({ data: req.body });
+                return [3 /*break*/, 3];
+            case 2:
+                err_3 = _a.sent();
+                res.json({ msg: err_3.message });
+                return [3 /*break*/, 3];
+            case 3: return [2 /*return*/];
+        }
+    });
+}); });
 router.put('/:id', function (req, res) {
     res.json({ msg: 'update movie' });
 });

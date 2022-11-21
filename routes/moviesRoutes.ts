@@ -1,19 +1,36 @@
 import express from 'express';
-import { getMovieList } from '../db/queries/movieQueries';
+import { getMovieById, getMovieList, createMovie } from '../db/queries/movieQueries';
 
 const router = express.Router();
 
 router.get('/', async (req, res) => {
-  const movieList = await getMovieList();
-  res.json({ data: movieList });
+  try {
+    const movieList = await getMovieList();
+    res.json({ movieList });
+  } catch (err) {
+    res.json({ msg: err.message });
+  }
 });
 
-router.get('/:id', (req, res) => {
-  res.json({ msg: 'get one movie' });
+router.get('/:id', async (req, res) => {
+  const id = Number(req.params.id);
+  try {
+    const movie = await getMovieById(id);
+    res.json({ movie });
+  } catch (err) {
+    res.json({ msg: err.message });
+  }
 });
 
-router.post('/', (req, res) => {
-  res.json({ msg: 'create movie' });
+router.post('/', async (req, res) => {
+
+  try {
+    const movie = await createMovie(req.body);
+    res.json({ data: req.body });
+  } catch (err) {
+    res.json({ msg: err.message });
+  }
+
 });
 router.put('/:id', (req, res) => {
   res.json({ msg: 'update movie' });

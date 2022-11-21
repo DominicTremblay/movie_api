@@ -460,14 +460,47 @@ app.use('/api/movies', moviesRoutes);
 3.1 Create the `getMovieList` query
 
 ```js
-import prisma from '../connection';
-
 export const getMovieList = async () => {
-    const movieList = await prisma.movie.findMany({
+            const movieList = await prisma.movie.findMany({
+                include: {
+                    movie_genres: {
+                        include: {
+                            genre: true,
+                        },
+                    },
+                    movie_casts: {
+                        include: {
+                            person: true,
+                        },
+                    },
+                },
+            });
+```
+
+3.2 Update the route handler
+
+```js
+router.get('/', async (req, res) => {
+    try {
+        const movieList = await getMovieList();
+        res.json({
+            movieList
+        });
+    } catch (err) {
+        res.json({
+            msg: err.message
+        });
+    }
+});
+```
+
+3.3 Create the `getMovieById` query
+
+```js
+export const getMovieById = async (id) => {
+    const movie = await prisma.movie.findUnique({
         where: {
-            movie_genres: {
-                some: {},
-            },
+            id,
         },
         include: {
             movie_genres: {
@@ -482,7 +515,24 @@ export const getMovieList = async () => {
             },
         },
     });
-
-    return movieList;
+    return movie;
 };
+```
+
+3.4 Update the Route Handler
+
+```js
+router.get('/:id', async (req, res) => {
+    const id = Number(req.params.id);
+    try {
+        const movie = await getMovieById(id);
+        res.json({
+            movie
+        });
+    } catch (err) {
+        res.json({
+            msg: err.message
+        });
+    }
+});
 ```
