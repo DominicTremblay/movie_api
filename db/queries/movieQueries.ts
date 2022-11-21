@@ -70,4 +70,5 @@ export const updateMovie = async (id, movieInfo) => {
     },
     data: formatMovie(movieInfo),
   });
+  return movie;
 };

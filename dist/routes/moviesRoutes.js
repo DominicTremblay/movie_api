@@ -103,15 +103,15 @@ router.post('/', function (req, res) { return __awaiter(void 0, void 0, void 0, 
     });
 }); });
 router.put('/:id', function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
-    var id;
+    var id, movie;
     return __generator(this, function (_a) {
         switch (_a.label) {
             case 0:
                 id = Number(req.params.id);
                 return [4 /*yield*/, (0, movieQueries_1.updateMovie)(id, req.body)];
             case 1:
-                _a.sent();
-                res.json({ msg: 'update movie' });
+                movie = _a.sent();
+                res.json(movie);
                 return [2 /*return*/];
         }
     });

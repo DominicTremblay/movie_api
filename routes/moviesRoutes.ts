@@ -40,8 +40,8 @@ router.post('/', async (req, res) => {
 router.put('/:id', async (req, res) => {
   const id = Number(req.params.id);
 
-  await updateMovie(id, req.body);
-  res.json({ msg: 'update movie' });
+  const movie = await updateMovie(id, req.body);
+  res.json(movie);
 });
 
 router.delete('/:id', async (req, res) => {

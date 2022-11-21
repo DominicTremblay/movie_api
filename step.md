@@ -590,6 +590,7 @@ export const updateMovie = async (id, movieInfo) => {
         },
         data: formatMovie(movieInfo),
     });
+    return movie;
 };
 ```
 
@@ -622,6 +623,15 @@ export const formatMovie = (movieInfo) => {
 ```
 
 3.8 Update the Route Handler
+
+```js
+router.put('/:id', async (req, res) => {
+    const id = Number(req.params.id);
+
+    const movie = await updateMovie(id, req.body);
+    res.json(movie);
+});
+```
 
 3.9 Create `db/queries/deleteMovie.ts`
 

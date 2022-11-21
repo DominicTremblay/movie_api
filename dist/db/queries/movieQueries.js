@@ -144,7 +144,7 @@ var updateMovie = function (id, movieInfo) { return __awaiter(void 0, void 0, vo
                 })];
             case 1:
                 movie = _a.sent();
-                return [2 /*return*/];
+                return [2 /*return*/, movie];
         }
     });
 }); };
