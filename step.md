@@ -1,5 +1,9 @@
 # Creating an API with Prisma
 
+## Clone the Express API repo
+
+
+
 ## Prisma setup
 
 1. Install Dependencies
@@ -784,4 +788,141 @@ import {
 } from './routes/genreRoutes';
 
 app.use('/api/genres', genresRoutes);
+```
+
+### 3. Create the basic CRUD for `routes/personRoutes.ts`
+
+```js
+import express from 'express';
+import {
+    createPerson,
+    deletePerson,
+    getPersonById,
+    getPersons,
+    updatePerson
+} from '../db/queries/personQueries';
+
+const router = express.Router();
+
+router.get('/', async (req, res) => {
+    try {
+        const persons = await getPersons();
+        res.json(persons);
+    } catch (err) {
+        res.json({
+            msg: err.message
+        });
+    }
+});
+
+router.get('/:id', async (req, res) => {
+    const id = Number(req.params.id);
+    try {
+        const person = await getPersonById(id);
+        res.json(person);
+    } catch (err) {
+        res.json({
+            msg: err.message
+        });
+    }
+});
+
+router.post('/', async (req, res) => {
+    try {
+        const person = await createPerson(req.body);
+        res.json(person);
+    } catch (err) {
+        res.json({
+            msg: err.message
+        });
+    }
+});
+
+router.put('/:id', async (req, res) => {
+    const id = Number(req.params.id);
+
+    try {
+        const person = await updatePerson(id, req.body);
+        res.json(person);
+    } catch (err) {
+        res.json({
+            msg: err.message
+        });
+    }
+});
+
+router.delete('/:id', async (req, res) => {
+    const id = Number(req.params.id);
+
+    try {
+        const person = await deletePerson(id);
+        res.json(person);
+    } catch (err) {
+        res.json({
+            msg: err.message
+        });
+    }
+});
+
+export default router;
+```
+
+3.1 Create `db/queries/personQueries.ts`
+
+```js
+import prisma from '../connection';
+
+export const getGenres = async () => {
+    const genres = await prisma.genre.findMany();
+
+    return genres;
+};
+
+export const getGenreById = async (id) => {
+    const genre = await prisma.genre.findUnique({
+        where: {
+            id,
+        },
+    });
+
+    return genre;
+};
+
+export const createGenre = async (genreInfo) => {
+    const genre = await prisma.genre.create({
+        data: genreInfo,
+    });
+
+    return genre;
+};
+
+export const updateGenre = async (id, genreInfo) => {
+    const genre = await prisma.genre.update({
+        where: {
+            id,
+        },
+        data: genreInfo,
+    });
+    return genre;
+};
+
+export const deleteGenre = async (id) => {
+    const genre = await prisma.genre.delete({
+        where: {
+            id,
+        },
+    });
+
+    return genre;
+};
+```
+
+3.2 Add the `routes/personRoutes.ts` to server.ts
+
+```js
+import {
+    default as personRoutes
+} from './routes/personRoutes';
+
+app.use('/api/persons', personRoutes);
 ```

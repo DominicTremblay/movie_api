@@ -21,13 +21,15 @@ app.use(express.json());
 // Separated Routes for each Resource
 // Note: Feel free to replace the example routes below with your own
 import { default as moviesRoutes } from './routes/moviesRoutes';
-import {default as genresRoutes} from './routes/genreRoutes';
+import { default as genresRoutes } from './routes/genreRoutes';
+import { default as personRoutes } from './routes/personRoutes';
 // Mount all resource routes
 // Note: Feel free to replace the example routes below with your own
 // Note: Endpoints that return data (eg. JSON) usually start with `/api`
 
 app.use('/api/movies', moviesRoutes);
 app.use('/api/genres', genresRoutes);
+app.use('/api/persons', personRoutes);
 
 // Note: mount other resources here, using the same pattern above
 
