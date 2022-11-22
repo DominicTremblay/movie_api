@@ -13,16 +13,22 @@
 * `npm i -D @types/node @types/express typescript tsc-watch ts-node`
 * `npm i prisma @prisma/client`
 
-2. Update npm scripts
+2. Update `package.json`
+
+2.1 Update scripts
 
 ```json
   "scripts": {
     "start": "node dist/src/index.js",
     "dev": "tsc-watch --onSuccess \"node ./dist/server.js\"",
-    "seed": "ts-node primsa/seed.ts",
+    "seed": "ts-node prisma/seed.ts",
     "build": "tsc"
   },
 ```
+
+2.2 Remove type module
+
+- `"type": "module"`
 
 3. Initalize Prisma
 
@@ -123,6 +129,10 @@ model Genre {
   updatedAt    DateTime     @updatedAt
 }
 ```
+
+1.1 Create the migrations
+
+- `npx prisma migrate dev --name=init`
 
 2. Create the seed files
 
@@ -335,9 +345,6 @@ export const movies = [{
 
 ```js
 import {
-    PrismaClient
-} from '@prisma/client';
-import {
     genres
 } from './seeds/genres';
 import {
@@ -347,22 +354,18 @@ import {
     persons
 } from './seeds/persons';
 
-const prisma = new PrismaClient();
+import prisma from '../db/connection';
 
 const seedGenres = async (genres) => {
-    for (let genre of genres) {
-        await prisma.genre.create({
-            data: genre,
-        });
-    }
+  await prisma.genre.createMany({
+    data: genres,
+  });
 };
 
 const seedPersons = async (persons) => {
-    for (let person of persons) {
-        await prisma.person.create({
-            data: person,
-        });
-    }
+  await prisma.person.createMany({
+    data: persons,
+  });
 };
 
 const seedMovies = async (movies) => {
